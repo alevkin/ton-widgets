@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaUSD Promo Fund Progress</title>
+  <style>
+    /* Основные стили для страницы */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #0d1b1e;
+      margin: 0;
+      padding: 10px;
+      box-sizing: border-box;
+      color: #ffffff;
+    }
+
+    /* Контейнер прогресс-бара */
+    .progress-container {
+      width: 100%;
+      max-width: 480px;
+      background-color: #1a2a2d;
+      border-radius: 30px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    /* Логотип */
+    .logo {
+      width: 60px;
+      height: 60px;
+      background: url('https://static.tildacdn.com/tild3331-6162-4939-b836-323830383636/image.png') no-repeat center center / cover;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+      margin: 0 auto 10px auto;
+    }
+
+    .progress-title {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #00b0b9;
+      margin-bottom: 10px;
+    }
+
+    .progress-bar-background {
+      width: 100%;
+      background-color: #2b3f41;
+      border-radius: 20px;
+      height: 30px;
+      overflow: hidden;
+      margin-top: 10px;
+      position: relative;
+    }
+
+    .progress-bar {
+      background: linear-gradient(90deg, #008f99, #00b0b9);
+      height: 100%;
+      border-radius: 20px 0 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: bold;
+      text-shadow: -1px -1px 2px rgba(0, 0, 0, 0.6), 1px 1px 2px rgba(0, 0, 0, 0.6);
+      transition: width 1s ease;
+    }
+
+    .progress-info {
+      margin-top: 15px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .goal-text {
+      font-size: 0.9em;
+      color: #c2d5d6;
+      margin-top: 5px;
+    }
+
+    .wallet-link {
+      font-size: 0.9em;
+      color: #00b0b9;
+      margin-top: 15px;
+      text-decoration: none;
+    }
+    .wallet-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-container">
+    <div class="logo"></div>
+    <div class="progress-title">Raising for AquaUSD Promo!</div>
+    <div class="progress-info" id="progress-info">Balance: - USD</div>
+    <div class="goal-text">Goal: Collect $200 for promotion</div>
+    <div class="progress-bar-background">
+      <div class="progress-bar" id="progress-bar">
+        <span id="progress-percent"></span>
+      </div>
+    </div>
+    <a href="https://tonviewer.com/aquausd-fans.ton" target="_blank" class="wallet-link">Donate here: aquausd-fans.ton</a>
+  </div>
+
+  <script>
+    const maxUSD = 200; // Target amount in USD
+    const walletAddress = 'EQAXmIFyLm-ZE_2aBuWQ2WlYnRgjVqQYeGYRE5FGaRay_--L';
+    let initialFillDone = false;
+
+    async function updateProgressBar() {
+      try {
+        // Fetching jetton balances
+        const jettonsResponse = await fetch(`https://tonapi.io/v2/accounts/${walletAddress}/jettons`);
+        const jettonsData = await jettonsResponse.json();
+
+        // Fetching TON balance
+        const tonResponse = await fetch(`https://tonapi.io/v2/accounts/${walletAddress}`);
+        const tonData = await tonResponse.json();
+
+        // Fetching prices
+        const pricesResponse = await fetch("https://api.dedust.io/v2/prices");
+        const pricesData = await pricesResponse.json();
+
+        // Getting TON price
+        const tonPriceData = pricesData.find(price => price.symbol === "TON");
+        const tonPrice = tonPriceData ? tonPriceData.price : null;
+
+        if (!tonPrice) {
+          console.error("TON price not found");
+          return;
+        }
+
+        const tonBalance = tonData.balance / 1e9;
+        const tonValueUSD = tonBalance * tonPrice;
+
+        // Calculating jettons value in USD
+        let jettonsValueUSD = 0;
+
+        for (const jetton of jettonsData.balances) {
+          const balance = parseFloat(jetton.balance);
+          const decimals = jetton.jetton.decimals;
+          const symbol = jetton.jetton.symbol;
+
+          let valueUSD = 0;
+
+          if (symbol === "USD₮" || symbol === "AquaUSD") {
+            const amount = balance / Math.pow(10, decimals);
+            valueUSD = amount;
+          } else {
+            const tokenPriceData = pricesData.find(price => price.symbol === symbol);
+            if (tokenPriceData) {
+              const tokenPrice = tokenPriceData.price;
+              const amount = balance / Math.pow(10, decimals);
+              valueUSD = amount * tokenPrice;
+            }
+          }
+          jettonsValueUSD += valueUSD;
+        }
+
+        const totalValueUSD = tonValueUSD + jettonsValueUSD;
+        const percentage = (totalValueUSD / maxUSD) * 100;
+
+        const progressBar = document.getElementById("progress-bar");
+        const progressText = document.getElementById("progress-percent");
+        const currentTokens = document.getElementById("progress-info");
+
+        progressBar.style.width = Math.min(percentage, 100) + '%';
+
+        if (!initialFillDone) {
+          progressBar.style.transition = 'width 3s ease';
+          animateValue(progressText, 0, percentage, 3000);
+          initialFillDone = true;
+        } else {
+          progressBar.style.transition = 'width 0.5s ease';
+          animateValue(progressText, parseFloat(progressText.innerText), percentage, 500);
+        }
+
+        currentTokens.innerText = `Balance: ${totalValueUSD.toFixed(2)} USD`;
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    function animateValue(obj, start, end, duration) {
+      let startTimestamp = null;
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        obj.innerText = (progress * (end - start) + start).toFixed(2) + '%';
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        }
+      };
+      window.requestAnimationFrame(step);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      updateProgressBar();
+      setInterval(updateProgressBar, 5000);
+    });
+  </script>
+</body>
+</html>
