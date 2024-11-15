@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaProtocol Info Widget</title>
+  <link rel="manifest" href="manifest.json">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+  <meta name="description" content="AquaUSD - Over-collateralized stablecoin on the TON blockchain. Mint, stake, and trade with AquaProtocol.">
+  <meta name="keywords" content="AquaUSD, TON blockchain, stablecoin, DeFi, cryptocurrency">
+
+  <style>
+    /* Основные стили для светлой и темной тем */
+    :root {
+      --background-color: #f0f8fa;
+      --text-color: #1b2833;
+      --container-bg-color: #ffffff;
+      --button-bg-color: #e6f1f4;
+      --accent-color: #00778b;
+      --tooltip-bg-color: #333;
+    }
+
+    [data-theme="dark"] {
+      --background-color: #0d1b1e;
+      --text-color: #ffffff;
+      --container-bg-color: #1a2a2d;
+      --button-bg-color: #2b3f41;
+      --accent-color: #00b0b9;
+      --tooltip-bg-color: #2b3f41;
+    }
+
+    /* Применение тем */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: var(--background-color);
+      margin: 0;
+      padding: 10px;
+      color: var(--text-color);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .info-container {
+      width: 100%;
+      max-width: 480px;
+      background-color: var(--container-bg-color);
+      border-radius: 30px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      position: relative;
+      box-sizing: border-box;
+      transition: background-color 0.3s;
+    }
+
+    /* Иконка для переключения темы */
+    .theme-toggle {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 1.5em;
+      color: var(--accent-color);
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .theme-toggle:hover {
+      color: #006377;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      background-size: cover;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(0, 119, 139, 0.5);
+      margin: 0 auto 10px auto;
+    }
+
+    .info-title {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: var(--accent-color);
+      margin-bottom: 5px;
+    }
+
+    .description {
+      font-size: 0.9em;
+      color: #5a6a72;
+      font-style: italic;
+    }
+
+    /* Информационные элементы */
+    .info-items {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+    }
+
+    .info-item {
+      flex: 1;
+      margin: 0 5px;
+      padding: 10px;
+      background-color: var(--button-bg-color);
+      border-radius: 10px;
+      text-align: center;
+      transition: background-color 0.3s;
+    }
+
+    .info-label {
+      font-weight: bold;
+      color: #5a6a72;
+      font-size: 0.8em;
+    }
+
+    .info-value {
+      color: var(--accent-color);
+      font-size: 1.2em;
+    }
+
+    /* Основные кнопки */
+    .main-links {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .main-link {
+      flex: 1;
+      padding: 10px;
+      background-color: var(--accent-color);
+      border-radius: 10px;
+      color: var(--container-bg-color);
+      text-decoration: none;
+      font-size: 1em;
+      font-weight: bold;
+      transition: background-color 0.3s, transform 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .main-link:hover {
+      background-color: #006377;
+      transform: scale(1.05);
+    }
+
+    /* Маленькие иконки */
+    .icon-links {
+      margin-top: 15px;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .icon-link {
+      text-decoration: none;
+      display: inline-block;
+      vertical-align: middle;
+      color: var(--accent-color);
+      font-size: 1.5em;
+      transition: color 0.3s, transform 0.3s;
+    }
+
+    .icon-link:hover {
+      color: #006377;
+      transform: scale(1.1);
+    }
+
+    .icon-link:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--tooltip-bg-color);
+      color: var(--text-color);
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 0.8em;
+      white-space: nowrap;
+    }
+
+    /* Мобильная адаптация */
+    @media (max-width: 480px) {
+      .info-items {
+        flex-direction: column;
+        gap: 10px;
+      }
+      .main-links {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body data-theme="dark">
+
+  <div class="info-container">
+    <!-- Переключатель темы -->
+    <div class="theme-toggle" id="theme-toggle" title="Toggle theme">
+      <i class="ri-sun-line" id="theme-icon"></i>
+    </div>
+
+    <div class="logo" id="logo" alt="AquaUSD logo"></div>
+    <div class="info-title" id="token-name" title="AquaUSD - Over-collateralized stablecoin">AquaUSD</div>
+    <div class="description" id="token-description">Over-collateralized stablecoin.</div>
+
+    <!-- Информация о токене -->
+    <div class="info-items">
+      <div class="info-item">
+        <div class="info-label">Supply</div>
+        <div class="info-value" id="total-supply">-</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Holders</div>
+        <div class="info-value" id="holders">-</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Updated</div>
+        <div class="info-value" id="last-updated">-</div>
+      </div>
+    </div>
+
+    <!-- Основные ссылки на сайт и Mini App -->
+    <div class="main-links">
+      <a href="https://aquaprotocol.xyz" target="_blank" class="main-link"><i class="ri-global-line"></i> Website</a>
+      <a href="https://tonviewer.com/aquausd-fans.ton" target="_blank" class="main-link"><i class="ri-coins-line"></i> Mint AquaUSD</a>
+    </div>
+
+    <!-- Иконки соцсетей и бирж -->
+    <div class="icon-links">
+      <a href="https://t.me/aquaprotocol" target="_blank" class="icon-link" data-tooltip="Join Telegram"><i class="ri-telegram-fill"></i></a>
+      <a href="https://twitter.com/aquaprotocol" target="_blank" class="icon-link" data-tooltip="Follow on X"><i class="ri-twitter-x-fill"></i></a>
+      <a href="https://dedust.io" target="_blank" class="icon-link" data-tooltip="Buy on DeDust.io"><i class="ri-exchange-fill"></i></a>
+      <a href="https://ston.fi" target="_blank" class="icon-link" data-tooltip="Buy on Ston.fi"><i class="ri-exchange-fill"></i></a>
+      <a href="https://xrocket.io" target="_blank" class="icon-link" data-tooltip="Buy on xRocket"><i class="ri-rocket-fill"></i></a>
+    </div>
+  </div>
+
+  <script>
+    // Переключатель тем
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.body.getAttribute('data-theme');
+        const isDark = currentTheme === 'dark';
+        const newTheme = isDark ? 'light' : 'dark';
+      
+        document.body.setAttribute('data-theme', newTheme);
+        themeIcon.className = isDark ? 'ri-moon-line' : 'ri-sun-line';
+      
+        // Сохранить выбранную тему в localStorage
+        localStorage.setItem('theme', newTheme);
+      });
+
+    async function updateWidgetInfo() {
+      try {
+        const response = await fetch(`https://tonapi.io/v2/jettons/EQAWDyxARSl3ol2G1RMLMwepr3v6Ter5ls3jiAlheKshgg0K`);
+        const data = await response.json();
+
+        const totalSupply = parseFloat(data.total_supply) / Math.pow(10, parseInt(data.metadata.decimals));
+        const holdersCount = data.holders_count;
+        const logoUrl = data.metadata.image;
+        const description = data.metadata.description;
+        const tokenName = data.metadata.name;
+
+        document.getElementById('total-supply').innerText = totalSupply.toFixed(2);
+        document.getElementById('holders').innerText = holdersCount;
+        document.getElementById('logo').style.backgroundImage = `url(${logoUrl})`;
+        document.getElementById('token-description').innerText = description;
+        document.getElementById('token-name').innerText = tokenName;
+
+        const now = new Date();
+        const lastUpdatedTime = now.getHours().toString().padStart(2, '0') + ':' +
+                                now.getMinutes().toString().padStart(2, '0') + ':' +
+                                now.getSeconds().toString().padStart(2, '0');
+        document.getElementById('last-updated').innerText = lastUpdatedTime;
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      updateWidgetInfo();
+      setInterval(updateWidgetInfo, 60000); // Update every 60 seconds
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.body.setAttribute('data-theme', savedTheme);
+      themeIcon.className = savedTheme === 'dark' ? 'ri-sun-line' : 'ri-moon-line';
+    });
+  </script>
+</body>
+</html>
