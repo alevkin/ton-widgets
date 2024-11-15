@@ -10,26 +10,46 @@
   <meta name="keywords" content="AquaUSD, TON blockchain, stablecoin, DeFi, cryptocurrency">
 
   <style>
-    /* Основные стили для светлой и темной тем */
+    /* Основные цветовые переменные и стили */
     :root {
-      --background-color: #f0f8fa;
-      --text-color: #1b2833;
-      --container-bg-color: #ffffff;
-      --button-bg-color: #e6f1f4;
-      --accent-color: #00778b;
-      --tooltip-bg-color: #333;
+      --background-color-light: #f0f8fa;
+      --text-color-light: #1b2833;
+      --container-bg-color-light: #ffffff;
+      --button-bg-color-light: #00778b;
+      --accent-color-light: #00778b;
+      --info-bg-color-light: #d9e4e7;
+      --info-text-color-light: #4a5b6b;
+
+      --background-color-dark: #0d1b1e;
+      --text-color-dark: #ffffff;
+      --container-bg-color-dark: #1a2a2d;
+      --button-bg-color-dark: #00b0b9;
+      --accent-color-dark: #00b0b9;
+      --info-bg-color-dark: #2b3f41;
+      --button-text-color-dark: #1b2833;
     }
 
     [data-theme="dark"] {
-      --background-color: #0d1b1e;
-      --text-color: #ffffff;
-      --container-bg-color: #1a2a2d;
-      --button-bg-color: #2b3f41;
-      --accent-color: #00b0b9;
-      --tooltip-bg-color: #2b3f41;
+      --background-color: var(--background-color-dark);
+      --text-color: var(--text-color-dark);
+      --container-bg-color: var(--container-bg-color-dark);
+      --button-bg-color: var(--button-bg-color-dark);
+      --accent-color: var(--accent-color-dark);
+      --info-bg-color: var(--info-bg-color-dark);
+      --button-text-color: var(--button-text-color-dark);
+      --info-text-color: #c2d5d6;
     }
 
-    /* Применение тем */
+    [data-theme="light"] {
+      --background-color: var(--background-color-light);
+      --text-color: var(--text-color-light);
+      --container-bg-color: var(--container-bg-color-light);
+      --button-bg-color: var(--button-bg-color-light);
+      --accent-color: var(--accent-color-light);
+      --info-bg-color: var(--info-bg-color-light);
+      --info-text-color: var(--info-text-color-light);
+    }
+
     body {
       font-family: Arial, sans-serif;
       display: flex;
@@ -56,20 +76,16 @@
       transition: background-color 0.3s;
     }
 
-    /* Иконка для переключения темы */
-    .theme-toggle {
+    .theme-toggle, .language-toggle {
       position: absolute;
       top: 15px;
-      right: 15px;
       font-size: 1.5em;
-      color: var(--accent-color);
       cursor: pointer;
       transition: color 0.3s;
     }
-
-    .theme-toggle:hover {
-      color: #006377;
-    }
+    .theme-toggle { right: 15px; }
+    .language-toggle { left: 15px; }
+    .language-toggle:hover, .theme-toggle:hover { color: var(--accent-color); }
 
     .logo {
       width: 60px;
@@ -78,6 +94,7 @@
       border-radius: 50%;
       box-shadow: 0 0 10px rgba(0, 119, 139, 0.5);
       margin: 0 auto 10px auto;
+      background-image: url('https://static.tildacdn.com/tild3331-6162-4939-b836-323830383636/image.png');
     }
 
     .info-title {
@@ -93,35 +110,37 @@
       font-style: italic;
     }
 
-    /* Информационные элементы */
     .info-items {
       display: flex;
       justify-content: space-between;
       margin-top: 15px;
+      padding: 10px;
+      background-color: var(--container-bg-color);
+      border-radius: 15px;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+      gap: 10px;
     }
 
     .info-item {
       flex: 1;
-      margin: 0 5px;
       padding: 10px;
-      background-color: var(--button-bg-color);
+      background-color: var(--info-bg-color);
       border-radius: 10px;
       text-align: center;
-      transition: background-color 0.3s;
+      color: var(--info-text-color);
     }
 
     .info-label {
       font-weight: bold;
-      color: #5a6a72;
       font-size: 0.8em;
+      margin-bottom: 5px;
     }
 
     .info-value {
       color: var(--accent-color);
-      font-size: 1.2em;
+      font-size: 1em;
     }
 
-    /* Основные кнопки */
     .main-links {
       margin-top: 20px;
       display: flex;
@@ -132,24 +151,25 @@
     .main-link {
       flex: 1;
       padding: 10px;
-      background-color: var(--accent-color);
+      background-color: var(--button-bg-color);
+      color: var(--button-text-color, #ffffff);
       border-radius: 10px;
-      color: var(--container-bg-color);
       text-decoration: none;
       font-size: 1em;
       font-weight: bold;
-      transition: background-color 0.3s, transform 0.3s;
+      text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 0 3px 10px rgba(0, 119, 139, 0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
     }
 
     .main-link:hover {
-      background-color: #006377;
-      transform: scale(1.05);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 5px 15px rgba(0, 119, 139, 0.4);
     }
 
-    /* Маленькие иконки */
     .icon-links {
       margin-top: 15px;
       display: flex;
@@ -160,7 +180,6 @@
     .icon-link {
       text-decoration: none;
       display: inline-block;
-      vertical-align: middle;
       color: var(--accent-color);
       font-size: 1.5em;
       transition: color 0.3s, transform 0.3s;
@@ -171,21 +190,23 @@
       transform: scale(1.1);
     }
 
-    .icon-link:hover::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      bottom: -25px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: var(--tooltip-bg-color);
-      color: var(--text-color);
-      padding: 5px 10px;
+    .share-button {
+      margin-top: 15px;
+      background-color: transparent;
+      color: var(--accent-color);
+      padding: 5px;
+      border: 1px solid var(--accent-color);
       border-radius: 5px;
-      font-size: 0.8em;
-      white-space: nowrap;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
     }
 
-    /* Мобильная адаптация */
+    .share-button:hover {
+      background-color: var(--accent-color);
+      color: #ffffff;
+    }
+
     @media (max-width: 480px) {
       .info-items {
         flex-direction: column;
@@ -197,41 +218,37 @@
     }
   </style>
 </head>
-<body data-theme="dark">
+<body>
 
   <div class="info-container">
-    <!-- Переключатель темы -->
-    <div class="theme-toggle" id="theme-toggle" title="Toggle theme">
-      <i class="ri-sun-line" id="theme-icon"></i>
-    </div>
+    <!-- Переключатель темы и языка -->
+    <div class="theme-toggle" id="theme-toggle" title="Toggle theme"><i class="ri-sun-line" id="theme-icon"></i></div>
+    <div class="language-toggle" id="language-toggle" title="Switch language"><i class="ri-earth-line"></i></div>
 
     <div class="logo" id="logo" alt="AquaUSD logo"></div>
     <div class="info-title" id="token-name" title="AquaUSD - Over-collateralized stablecoin">AquaUSD</div>
     <div class="description" id="token-description">Over-collateralized stablecoin.</div>
 
-    <!-- Информация о токене -->
     <div class="info-items">
       <div class="info-item">
-        <div class="info-label">Supply</div>
-        <div class="info-value" id="total-supply">-</div>
+        <div class="info-label" data-en="Supply" data-ru="Предложение">Supply</div>
+        <div class="info-value" id="total-supply">520712.63</div>
       </div>
       <div class="info-item">
-        <div class="info-label">Holders</div>
-        <div class="info-value" id="holders">-</div>
+        <div class="info-label" data-en="Holders" data-ru="Держатели">Holders</div>
+        <div class="info-value" id="holders">1180</div>
       </div>
       <div class="info-item">
-        <div class="info-label">Updated</div>
-        <div class="info-value" id="last-updated">-</div>
+        <div class="info-label" data-en="Price" data-ru="Цена">Price</div>
+        <div class="info-value" id="price">$1.00</div> <!-- Hardcoded price -->
       </div>
     </div>
 
-    <!-- Основные ссылки на сайт и Mini App -->
     <div class="main-links">
-      <a href="https://aquaprotocol.xyz" target="_blank" class="main-link"><i class="ri-global-line"></i> Website</a>
-      <a href="https://tonviewer.com/aquausd-fans.ton" target="_blank" class="main-link"><i class="ri-coins-line"></i> Mint AquaUSD</a>
+      <a href="https://aquaprotocol.xyz" target="_blank" class="main-link" data-en="Website" data-ru="Вебсайт"><i class="ri-global-line"></i> Website</a>
+      <a href="https://tonviewer.com/aquausd-fans.ton" target="_blank" class="main-link" data-en="Mint AquaUSD" data-ru="Минт AquaUSD"><i class="ri-coins-line"></i> Mint AquaUSD</a>
     </div>
 
-    <!-- Иконки соцсетей и бирж -->
     <div class="icon-links">
       <a href="https://t.me/aquaprotocol" target="_blank" class="icon-link" data-tooltip="Join Telegram"><i class="ri-telegram-fill"></i></a>
       <a href="https://twitter.com/aquaprotocol" target="_blank" class="icon-link" data-tooltip="Follow on X"><i class="ri-twitter-x-fill"></i></a>
@@ -239,58 +256,51 @@
       <a href="https://ston.fi" target="_blank" class="icon-link" data-tooltip="Buy on Ston.fi"><i class="ri-exchange-fill"></i></a>
       <a href="https://xrocket.io" target="_blank" class="icon-link" data-tooltip="Buy on xRocket"><i class="ri-rocket-fill"></i></a>
     </div>
+
+    <button class="share-button" id="share-button" data-en="Share" data-ru="Поделиться">Поделиться</button>
   </div>
 
   <script>
-    // Переключатель тем
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
+    const languageToggle = document.getElementById('language-toggle');
+    const shareButton = document.getElementById('share-button');
+    const elementsWithLang = document.querySelectorAll('[data-en]');
+    let currentLang = localStorage.getItem('language') || (navigator.language.startsWith('ru') ? 'ru' : 'en');
+
+    const updateLanguage = (lang) => {
+      elementsWithLang.forEach(el => {
+        el.innerText = el.getAttribute(`data-${lang}`);
+      });
+      localStorage.setItem('language', lang);
+    };
+
+    document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark');
+    themeIcon.className = document.documentElement.getAttribute('data-theme') === 'dark' ? 'ri-sun-line' : 'ri-moon-line';
+    updateLanguage(currentLang);
 
     themeToggle.addEventListener('click', () => {
-        const currentTheme = document.body.getAttribute('data-theme');
-        const isDark = currentTheme === 'dark';
-        const newTheme = isDark ? 'light' : 'dark';
-      
-        document.body.setAttribute('data-theme', newTheme);
-        themeIcon.className = isDark ? 'ri-moon-line' : 'ri-sun-line';
-      
-        // Сохранить выбранную тему в localStorage
-        localStorage.setItem('theme', newTheme);
-      });
+      const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      themeIcon.className = newTheme === 'dark' ? 'ri-sun-line' : 'ri-moon-line';
+    });
 
-    async function updateWidgetInfo() {
-      try {
-        const response = await fetch(`https://tonapi.io/v2/jettons/EQAWDyxARSl3ol2G1RMLMwepr3v6Ter5ls3jiAlheKshgg0K`);
-        const data = await response.json();
+    languageToggle.addEventListener('click', () => {
+      currentLang = currentLang === 'en' ? 'ru' : 'en';
+      updateLanguage(currentLang);
+    });
 
-        const totalSupply = parseFloat(data.total_supply) / Math.pow(10, parseInt(data.metadata.decimals));
-        const holdersCount = data.holders_count;
-        const logoUrl = data.metadata.image;
-        const description = data.metadata.description;
-        const tokenName = data.metadata.name;
-
-        document.getElementById('total-supply').innerText = totalSupply.toFixed(2);
-        document.getElementById('holders').innerText = holdersCount;
-        document.getElementById('logo').style.backgroundImage = `url(${logoUrl})`;
-        document.getElementById('token-description').innerText = description;
-        document.getElementById('token-name').innerText = tokenName;
-
-        const now = new Date();
-        const lastUpdatedTime = now.getHours().toString().padStart(2, '0') + ':' +
-                                now.getMinutes().toString().padStart(2, '0') + ':' +
-                                now.getSeconds().toString().padStart(2, '0');
-        document.getElementById('last-updated').innerText = lastUpdatedTime;
-      } catch (error) {
-        console.error('Error fetching data:', error);
+    document.getElementById('share-button').addEventListener('click', () => {
+      if (navigator.share) {
+        navigator.share({
+          title: 'AquaUSD Info',
+          text: 'Check out AquaUSD - Over-collateralized stablecoin!',
+          url: 'https://aquaprotocol.xyz'
+        }).catch(console.error);
+      } else {
+        alert('Share API not supported');
       }
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      updateWidgetInfo();
-      setInterval(updateWidgetInfo, 60000); // Update every 60 seconds
-      const savedTheme = localStorage.getItem('theme') || 'dark';
-      document.body.setAttribute('data-theme', savedTheme);
-      themeIcon.className = savedTheme === 'dark' ? 'ri-sun-line' : 'ri-moon-line';
     });
   </script>
 </body>
