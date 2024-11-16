@@ -297,11 +297,26 @@
       function updateTelegramTheme(theme) {
         if (isTelegram) {
           const tg = window.Telegram.WebApp;
-          const bgColor = theme === 'dark' ? '#0d1b1e' : '#f0f8fa';
-          const buttonColor = theme === 'dark' ? '#00b0b9' : '#00778b';
-          tg.setBackgroundColor(bgColor);
-          tg.MainButton.color = buttonColor;
-          tg.MainButton.textColor = theme === 'dark' ? '#1b2833' : '#ffffff';
+          const themeParams = theme === 'dark' ? {
+            header_bg_color: '#00778b',
+            bg_color: '#0d1b1e',
+            button_color: '#00b0b9',
+            text_color: '#ffffff',
+            hint_color: '#c2d5d6',
+            link_color: '#00b0b9'
+          } : {
+            header_bg_color: '#00778b',
+            bg_color: '#f0f8fa',
+            button_color: '#00778b',
+            text_color: '#1b2833',
+            hint_color: '#4a5b6b',
+            link_color: '#00778b'
+          };
+
+          tg.setBackgroundColor(themeParams.bg_color);
+          tg.setHeaderColor('bg_color', themeParams.header_bg_color);
+          tg.MainButton.color = themeParams.button_color;
+          tg.MainButton.textColor = themeParams.text_color;
         }
       }
 
