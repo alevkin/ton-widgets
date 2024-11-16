@@ -158,7 +158,7 @@
       flex: 1;
       padding: 10px;
       background-color: var(--button-bg-color);
-      color: var(--button-text-color, #ffffff);
+      color: var(--button-text-color, #000000);
       border-radius: 10px;
       text-decoration: none;
       font-size: 1em;
@@ -301,7 +301,7 @@
             header_bg_color: '#00778b',
             bg_color: '#0d1b1e',
             button_color: '#00b0b9',
-            text_color: '#ffffff',
+            text_color: '#1b2833',
             hint_color: '#c2d5d6',
             link_color: '#00b0b9'
           } : {
@@ -315,6 +315,19 @@
 
           tg.setBackgroundColor(themeParams.bg_color);
           tg.setHeaderColor('bg_color', themeParams.header_bg_color);
+          tg.updateTheme({
+            colors: {
+              'header': themeParams.header_bg_color,
+              'primary': themeParams.button_color,
+              'primary_text': themeParams.text_color,
+              'secondary': themeParams.button_color,
+              'secondary_text': themeParams.text_color,
+              'accent': themeParams.button_color,
+              'accent_text': themeParams.text_color,
+              'hint': themeParams.hint_color,
+              'link': themeParams.link_color
+            }
+          });
           tg.MainButton.color = themeParams.button_color;
           tg.MainButton.textColor = themeParams.text_color;
         }
