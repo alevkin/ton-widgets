@@ -8,7 +8,18 @@
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
   <meta name="description" content="AquaUSD - Over-collateralized stablecoin on the TON blockchain. Mint, stake, and trade with AquaProtocol.">
   <meta name="keywords" content="AquaUSD, TON blockchain, stablecoin, DeFi, cryptocurrency">
+  <!-- Open Graph Tags для красивого превью в Telegram и других соцсетях -->
+  <meta property="og:title" content="AquaUSD - Over-collateralized Stablecoin">
+  <meta property="og:description" content="Mint, stake, and trade AquaUSD - the over-collateralized stablecoin on the TON blockchain.">
+  <meta property="og:image" content="https://static.tildacdn.com/tild3331-6162-4939-b836-323830383636/image.png"> <!-- ссылка на изображение логотипа -->
+  <meta property="og:url" content="https://aquaprotocol.xyz">
+  <meta property="og:type" content="website">
 
+  <!-- Twitter Card Tags для поддержки в Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AquaUSD - Over-collateralized Stablecoin">
+  <meta name="twitter:description" content="Mint, stake, and trade AquaUSD - the over-collateralized stablecoin on the TON blockchain.">
+  <meta name="twitter:image" content="https://static.tildacdn.com/tild3331-6162-4939-b836-323830383636/image.png">
   <style>
     /* Основные цветовые переменные и стили */
     :root {
@@ -250,6 +261,7 @@
     </div>
 
     <div class="icon-links">
+      <a href="https://docs.aquaprotocol.xyz " target="_blank" class="icon-link" data-tooltip="Documentation"><i class="ri-file-list-3-line"></i></a>
       <a href="https://t.me/aquaprotocolxyzchannelen" target="_blank" class="icon-link" data-tooltip="Telegram Channel"><i class="ri-telegram-fill"></i></a>
       <a href="https://t.me/aquaprotocolxyzen" target="_blank" class="icon-link" data-tooltip="Telegram Group"><i class="ri-group-line"></i></a>
       <a href="https://twitter.com/aquaprotocolxyz" target="_blank" class="icon-link" data-tooltip="Follow on X"><i class="ri-twitter-x-fill"></i></a>
@@ -260,7 +272,38 @@
     <button class="share-button" id="share-button" data-en="Share" data-ru="Поделиться">Поделиться</button>
   </div>
 
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
   <script>
+    // Проверяем, запущен ли виджет в контексте Telegram Mini App
+    const isTelegramApp = typeof window.Telegram !== 'undefined' && window.Telegram.WebApp;
+
+    if (isTelegramApp) {
+      // Инициализируем Telegram Web App
+      const tg = window.Telegram.WebApp;
+      tg.expand(); // Расширяем виджет на полный экран
+
+      // Пример: получаем информацию о пользователе
+      const user = tg.initDataUnsafe.user;
+      console.log("Пользователь Telegram:", user);
+
+      // Пример: меняем цвет темы на основе Telegram темы пользователя
+      if (tg.colorScheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+
+      // Используем кнопку "Mint AquaUSD" для запуска мини-приложения
+      document.getElementById('mintButton').addEventListener('click', () => {
+        tg.MainButton.setText("Minting AquaUSD...");
+        tg.MainButton.show();
+        tg.MainButton.onClick(() => {
+          // Действие для кнопки в Telegram Mini App
+          window.location.href = 'https://app.aquaprotocol.xyz/';
+        });
+      });
+    }
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
     const languageToggle = document.getElementById('language-toggle');

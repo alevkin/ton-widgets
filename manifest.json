@@ -1,6 +1,6 @@
 {
     "name": "AquaProtocol Info Widget",
-    "short_name": "AquaWidget",
+    "short_name": "AquaUSD",
     "description": "On-chain information widget for AquaProtocol",
     "start_url": "/about-aquausd.html",
     "display": "standalone",
