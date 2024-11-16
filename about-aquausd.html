@@ -26,6 +26,7 @@
       --accent-color-light: #00778b;
       --info-bg-color-light: #d9e4e7;
       --info-text-color-light: #4a5b6b;
+      --button-text-color-light: #ffffff;
       --background-color-dark: #0d1b1e;
       --text-color-dark: #ffffff;
       --container-bg-color-dark: #1a2a2d;
@@ -53,6 +54,7 @@
       --button-bg-color: var(--button-bg-color-light);
       --accent-color: var(--accent-color-light);
       --info-bg-color: var(--info-bg-color-light);
+      --button-text-color: var(--button-text-color-light);
       --info-text-color: var(--info-text-color-light);
     }
 
@@ -314,6 +316,7 @@
           };
           tg.setBackgroundColor(themeParams.bg_color);
           tg.setHeaderColor(themeParams.header_bg_color);
+          tg.setBottomBarColor(themeParams.bg_color);
           tg.MainButton.color = themeParams.button_color;
           tg.MainButton.textColor = themeParams.text_color;
         }
