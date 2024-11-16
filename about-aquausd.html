@@ -275,76 +275,68 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <script>
-    // Проверяем, запущен ли виджет в контексте Telegram Mini App
-    const isTelegramApp = typeof window.Telegram !== 'undefined' && window.Telegram.WebApp;
-
-    if (isTelegramApp) {
-      // Инициализируем Telegram Web App
-      const tg = window.Telegram.WebApp;
-      tg.expand(); // Расширяем виджет на полный экран
-
-      // Пример: получаем информацию о пользователе
-      const user = tg.initDataUnsafe.user;
-      console.log("Пользователь Telegram:", user);
-
-      // Пример: меняем цвет темы на основе Telegram темы пользователя
-      if (tg.colorScheme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-      } else {
-        document.documentElement.setAttribute('data-theme', 'light');
-      }
-
-      // Используем кнопку "Mint AquaUSD" для запуска мини-приложения
-      document.getElementById('mintButton').addEventListener('click', () => {
-        tg.MainButton.setText("Minting AquaUSD...");
-        tg.MainButton.show();
-        tg.MainButton.onClick(() => {
-          // Действие для кнопки в Telegram Mini App
-          window.location.href = 'https://app.aquaprotocol.xyz/';
-        });
-      });
-    }
+    // Переключатель темы
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
     const languageToggle = document.getElementById('language-toggle');
-    const shareButton = document.getElementById('share-button');
     const elementsWithLang = document.querySelectorAll('[data-en]');
+    const shareButton = document.getElementById('share-button');
+
+    // Определяем язык и тему
     let currentLang = localStorage.getItem('language') || (navigator.language.startsWith('ru') ? 'ru' : 'en');
+    let currentTheme = localStorage.getItem('theme') || 'dark';
 
-    const updateLanguage = (lang) => {
-      elementsWithLang.forEach(el => {
-        el.innerText = el.getAttribute(`data-${lang}`);
-      });
+    // Устанавливаем язык
+    function updateLanguage(lang) {
+      elementsWithLang.forEach(el => el.innerText = el.getAttribute(`data-${lang}`));
       localStorage.setItem('language', lang);
-    };
+    }
 
-    document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark');
-    themeIcon.className = document.documentElement.getAttribute('data-theme') === 'dark' ? 'ri-sun-line' : 'ri-moon-line';
-    updateLanguage(currentLang);
+    // Устанавливаем тему
+    function updateTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      themeIcon.className = theme === 'dark' ? 'ri-sun-line' : 'ri-moon-line';
+      localStorage.setItem('theme', theme);
+    }
 
-    themeToggle.addEventListener('click', () => {
-      const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
-      themeIcon.className = newTheme === 'dark' ? 'ri-sun-line' : 'ri-moon-line';
-    });
-
-    languageToggle.addEventListener('click', () => {
-      currentLang = currentLang === 'en' ? 'ru' : 'en';
+    // Восстанавливаем состояние при загрузке
+    document.addEventListener('DOMContentLoaded', () => {
       updateLanguage(currentLang);
+      updateTheme(currentTheme);
+
+      themeToggle.addEventListener('click', () => {
+        currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        updateTheme(currentTheme);
+      });
+
+      languageToggle.addEventListener('click', () => {
+        currentLang = currentLang === 'en' ? 'ru' : 'en';
+        updateLanguage(currentLang);
+      });
+
+      shareButton.addEventListener('click', () => {
+        if (navigator.share) {
+          navigator.share({
+            title: 'AquaUSD Info',
+            text: 'Check out AquaUSD - Over-collateralized stablecoin!',
+            url: 'https://tonwidgets.levk.in/about-aquausd.html'
+          }).catch(console.error);
+        } else {
+          alert('Sharing not supported');
+        }
+      });
     });
 
-    document.getElementById('share-button').addEventListener('click', () => {
-      if (navigator.share) {
-        navigator.share({
-          title: 'AquaUSD Info',
-          text: 'Check out AquaUSD - Over-collateralized stablecoin!',
-          url: 'https://tonwidgets.levk.in/about-aquausd.html'
-        }).catch(console.error);
-      } else {
-        alert('Share API not supported');
-      }
-    });
+    // Telegram Mini App
+    if (typeof window.Telegram !== 'undefined' && window.Telegram.WebApp) {
+      const tg = window.Telegram.WebApp;
+      tg.expand();
+      tg.MainButton.setText("Mint AquaUSD");
+      tg.MainButton.show();
+      tg.MainButton.onClick(() => {
+        window.location.href = "https://app.aquaprotocol.xyz/";
+      });
+    }
   </script>
 </body>
 </html>
