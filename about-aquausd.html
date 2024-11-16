@@ -257,7 +257,7 @@
 
     <div class="main-links">
       <a href="https://aquaprotocol.xyz/" target="_blank" class="main-link" data-en="Website" data-ru="Вебсайт"><i class="ri-global-line"></i> Website</a>
-      <a href="https://app.aquaprotocol.xyz/" target="_blank" class="main-link" data-en="Mint AquaUSD" data-ru="Минт AquaUSD"><i class="ri-coins-line"></i> Mint AquaUSD</a>
+      <a href="https://app.aquaprotocol.xyz/" target="_blank" class="main-link" id="mint-button" data-en="Mint AquaUSD" data-ru="Минт AquaUSD"><i class="ri-coins-line"></i> Mint AquaUSD</a>
     </div>
 
     <div class="icon-links">
@@ -329,14 +329,26 @@
 
     // Telegram Mini App
     if (typeof window.Telegram !== 'undefined' && window.Telegram.WebApp) {
-      const tg = window.Telegram.WebApp;
-      tg.expand();
-      tg.MainButton.setText("Mint AquaUSD");
-      tg.MainButton.show();
-      tg.MainButton.onClick(() => {
-        window.location.href = "https://app.aquaprotocol.xyz/";
-      });
-    }
+        const tg = window.Telegram.WebApp;
+      
+        // Расширяем приложение на весь экран
+        tg.expand();
+      
+        // Показываем нативную кнопку в Telegram
+        tg.MainButton.setText("Mint AquaUSD");
+        tg.MainButton.show();
+      
+        // Убираем обычную вебовскую кнопку
+        const mintButton = document.getElementById('mint-button');
+        if (mintButton) {
+          mintButton.style.display = 'none';
+        }
+      
+        // Обработка клика на нативную кнопку
+        tg.MainButton.onClick(() => {
+          window.location.href = "https://app.aquaprotocol.xyz/";
+        });
+      }
   </script>
 </body>
 </html>
