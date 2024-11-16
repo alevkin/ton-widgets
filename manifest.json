@@ -2,18 +2,18 @@
     "name": "AquaProtocol Info Widget",
     "short_name": "AquaWidget",
     "description": "On-chain information widget for AquaProtocol",
-    "start_url": "/index.html",
+    "start_url": "/about-aquausd.html",
     "display": "standalone",
     "background_color": "#0d1b1e",
     "theme_color": "#0d1b1e",
     "icons": [
       {
-        "src": "icon-192x192.png",
+        "src": "aquausd-192x192.png",
         "sizes": "192x192",
         "type": "image/png"
       },
       {
-        "src": "icon-512x512.png",
+        "src": "aquausd-512x512.png",
         "sizes": "512x512",
         "type": "image/png"
       }
