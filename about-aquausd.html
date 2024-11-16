@@ -308,26 +308,13 @@
             header_bg_color: '#00778b',
             bg_color: '#f0f8fa',
             button_color: '#00778b',
-            text_color: '#1b2833',
+            text_color: '#ffffff',
             hint_color: '#4a5b6b',
             link_color: '#00778b'
           };
-
           tg.setBackgroundColor(themeParams.bg_color);
           tg.setHeaderColor('bg_color', themeParams.header_bg_color);
-          tg.updateTheme({
-            colors: {
-              'header': themeParams.header_bg_color,
-              'primary': themeParams.button_color,
-              'primary_text': themeParams.text_color,
-              'secondary': themeParams.button_color,
-              'secondary_text': themeParams.text_color,
-              'accent': themeParams.button_color,
-              'accent_text': themeParams.text_color,
-              'hint': themeParams.hint_color,
-              'link': themeParams.link_color
-            }
-          });
+          tg.header_bg_color = themeParams.header_bg_color;
           tg.MainButton.color = themeParams.button_color;
           tg.MainButton.textColor = themeParams.text_color;
         }
