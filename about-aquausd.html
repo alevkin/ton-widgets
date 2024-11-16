@@ -270,6 +270,8 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // Проверка, запущено ли приложение внутри Telegram
+      const isTelegram = typeof window.Telegram !== 'undefined' && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && Object.keys(window.Telegram.WebApp.initDataUnsafe).length > 0;
       const themeToggle = document.getElementById('theme-toggle');
       const themeIcon = document.getElementById('theme-icon');
       const languageToggle = document.getElementById('language-toggle');
@@ -289,6 +291,18 @@
         document.documentElement.setAttribute('data-theme', theme);
         themeIcon.className = theme === 'dark' ? 'ri-sun-line' : 'ri-moon-line';
         localStorage.setItem('theme', theme);
+        updateTelegramTheme(theme);
+      }
+
+      function updateTelegramTheme(theme) {
+        if (isTelegram) {
+          const tg = window.Telegram.WebApp;
+          const bgColor = theme === 'dark' ? '#0d1b1e' : '#f0f8fa';
+          const buttonColor = theme === 'dark' ? '#00b0b9' : '#00778b';
+          tg.setBackgroundColor(bgColor);
+          tg.MainButton.color = buttonColor;
+          tg.MainButton.textColor = theme === 'dark' ? '#1b2833' : '#ffffff';
+        }
       }
 
       updateLanguage(currentLang);
@@ -316,16 +330,9 @@
         }
       });
 
-      // Проверка, запущено ли приложение внутри Telegram
-      const isTelegram = typeof window.Telegram !== 'undefined' && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && Object.keys(window.Telegram.WebApp.initDataUnsafe).length > 0;
-
       if (isTelegram) {
         const tg = window.Telegram.WebApp;
-      
-      
-        // Расширяем приложение на весь экран
 
-        // Расширяем приложение на весь экран
         tg.expand();
 
         if (tg.MainButton) {
