@@ -2,7 +2,7 @@
     "name": "AquaProtocol Info Widget",
     "short_name": "AquaUSD",
     "description": "On-chain information widget for AquaProtocol",
-    "start_url": "/about-aquausd.html",
+    "start_url": "/",
     "display": "standalone",
     "background_color": "#0d1b1e",
     "theme_color": "#0d1b1e",

@@ -1,212 +1,469 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script
+    src="https://js-de.sentry-cdn.com/2bea0cfc771b4ebcaf2b573c31b8cbf0.min.js"
+    crossorigin="anonymous">
+  </script>
+  <script>
+    Sentry.onLoad(function() {
+      Sentry.init({
+          // Tracing
+          tracesSampleRate: 1.0, // Capture 100% of the transactions
+          // Session Replay
+          replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
+          replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
+        });
+    });
+  </script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LDKZZC0LYT"></script>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-LDKZZC0LYT');
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AquaUSD Promo Fund Progress</title>
+  <title>AquaProtocol Info Widget</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="aquausd-512x512-ios.png">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+  <meta name="description" content="AquaUSD - Over-collateralized stablecoin on the TON blockchain. Mint, stake, and trade with AquaProtocol.">
+  <meta name="keywords" content="AquaUSD, TON blockchain, stablecoin, DeFi, cryptocurrency">
+  <meta property="og:title" content="AquaUSD - Over-collateralized Stablecoin">
+  <meta property="og:description" content="Mint, stake, and trade AquaUSD - the over-collateralized stablecoin on the TON blockchain.">
+  <meta property="og:image" content="https://static.tildacdn.com/tild3331-6162-4939-b836-323830383636/image.png">
+  <meta property="og:url" content="https://aquaprotocol.xyz">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AquaUSD - Over-collateralized Stablecoin">
+  <meta name="twitter:description" content="Mint, stake, and trade AquaUSD - the over-collateralized stablecoin on the TON blockchain.">
+  <meta name="twitter:image" content="https://static.tildacdn.com/tild3331-6162-4939-b836-323830383636/image.png">
   <style>
-    /* Основные стили для страницы */
+    :root {
+      --background-color-light: #f0f8fa;
+      --text-color-light: #1b2833;
+      --container-bg-color-light: #ffffff;
+      --button-bg-color-light: #00778b;
+      --accent-color-light: #00778b;
+      --info-bg-color-light: #d9e4e7;
+      --info-text-color-light: #4a5b6b;
+      --button-text-color-light: #ffffff;
+      --background-color-dark: #0d1b1e;
+      --text-color-dark: #ffffff;
+      --container-bg-color-dark: #1a2a2d;
+      --button-bg-color-dark: #00b0b9;
+      --accent-color-dark: #00b0b9;
+      --info-bg-color-dark: #2b3f41;
+      --button-text-color-dark: #1b2833;
+    }
+
+    [data-theme="dark"] {
+      --background-color: var(--background-color-dark);
+      --text-color: var(--text-color-dark);
+      --container-bg-color: var(--container-bg-color-dark);
+      --button-bg-color: var(--button-bg-color-dark);
+      --accent-color: var(--accent-color-dark);
+      --info-bg-color: var(--info-bg-color-dark);
+      --button-text-color: var(--button-text-color-dark);
+      --info-text-color: #c2d5d6;
+    }
+
+    [data-theme="light"] {
+      --background-color: var(--background-color-light);
+      --text-color: var(--text-color-light);
+      --container-bg-color: var(--container-bg-color-light);
+      --button-bg-color: var(--button-bg-color-light);
+      --accent-color: var(--accent-color-light);
+      --info-bg-color: var(--info-bg-color-light);
+      --button-text-color: var(--button-text-color-light);
+      --info-text-color: var(--info-text-color-light);
+    }
+
     body {
       font-family: Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      background-color: #0d1b1e;
+      background-color: var(--background-color);
       margin: 0;
       padding: 10px;
-      box-sizing: border-box;
-      color: #ffffff;
+      color: var(--text-color);
+      transition: background-color 0.3s, color 0.3s;
     }
 
-    /* Контейнер прогресс-бара */
-    .progress-container {
+    .info-container {
       width: 100%;
       max-width: 480px;
-      background-color: #1a2a2d;
+      background-color: var(--container-bg-color);
       border-radius: 30px;
       padding: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
       text-align: center;
       position: relative;
       box-sizing: border-box;
+      transition: background-color 0.3s;
     }
 
-    /* Логотип */
+    .theme-toggle, .language-toggle {
+      position: absolute;
+      top: 15px;
+      font-size: 1.5em;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .theme-toggle { right: 15px; }
+    .language-toggle { left: 15px; }
+    .language-toggle:hover, .theme-toggle:hover { color: var(--accent-color); }
+
     .logo {
       width: 60px;
       height: 60px;
-      background: url('https://static.tildacdn.com/tild3331-6162-4939-b836-323830383636/image.png') no-repeat center center / cover;
+      background-size: cover;
       border-radius: 50%;
-      box-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+      box-shadow: 0 0 10px rgba(0, 119, 139, 0.5);
       margin: 0 auto 10px auto;
+      background-image: url('https://static.tildacdn.com/tild3331-6162-4939-b836-323830383636/image.png');
     }
 
-    .progress-title {
+    .info-title {
       font-size: 1.5em;
       font-weight: bold;
-      color: #00b0b9;
-      margin-bottom: 10px;
+      color: var(--accent-color);
+      margin-bottom: 5px;
     }
 
-    .progress-bar-background {
-      width: 100%;
-      background-color: #2b3f41;
-      border-radius: 20px;
-      height: 30px;
-      overflow: hidden;
-      margin-top: 10px;
-      position: relative;
+    .description {
+      font-size: 0.9em;
+      color: #5a6a72;
+      font-style: italic;
     }
 
-    .progress-bar {
-      width: 0%;
-      background: linear-gradient(90deg, #008f99, #00b0b9);
-      height: 100%;
-      border-radius: 20px 0 0 20px;
+    .info-items {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+      padding: 10px;
+      background-color: var(--container-bg-color);
+      border-radius: 15px;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+      gap: 10px;
+    }
+
+    .info-item {
+      flex: 1;
+      padding: 10px;
+      background-color: var(--info-bg-color);
+      border-radius: 10px;
+      text-align: center;
+      color: var(--info-text-color);
+    }
+
+    .info-label {
+      font-weight: bold;
+      font-size: 0.8em;
+      margin-bottom: 5px;
+    }
+
+    .info-value {
+      color: var(--accent-color);
+      font-size: 1em;
+    }
+
+    .main-links {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .main-link {
+      flex: 1;
+      padding: 10px;
+      background-color: var(--button-bg-color);
+      color: var(--button-text-color, #000000);
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #ffffff;
-      font-weight: bold;
-      text-shadow: -1px -1px 2px rgba(0, 0, 0, 0.6), 1px 1px 2px rgba(0, 0, 0, 0.6);
-      transition: width 1s ease;
+      box-shadow: 0 3px 10px rgba(0, 119, 139, 0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
     }
 
-    .progress-info {
+    .main-link:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 5px 15px rgba(0, 119, 139, 0.4);
+    }
+
+    .icon-links {
       margin-top: 15px;
-      font-size: 1.2em;
-      font-weight: bold;
-      color: #ffffff;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
     }
 
-    .goal-text {
-      font-size: 0.9em;
-      color: #c2d5d6;
-      margin-top: 5px;
-    }
-
-    .wallet-link {
-      font-size: 0.9em;
-      color: #00b0b9;
-      margin-top: 15px;
+    .icon-link {
       text-decoration: none;
+      display: inline-block;
+      color: var(--accent-color);
+      font-size: 1.5em;
+      transition: color 0.3s, transform 0.3s;
     }
-    .wallet-link:hover {
-      text-decoration: underline;
+
+    .icon-link:hover {
+      color: #006377;
+      transform: scale(1.1);
+    }
+
+    .share-button {
+      margin-top: 15px;
+      background-color: transparent;
+      color: var(--accent-color);
+      padding: 5px;
+      border: 1px solid var(--accent-color);
+      border-radius: 5px;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .share-button:hover {
+      background-color: var(--accent-color);
+      color: #ffffff;
+    }
+
+    @media (max-width: 480px) {
+      .info-items {
+        flex-direction: column;
+        gap: 10px;
+      }
+      .main-links {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="info-container">
+    <div class="theme-toggle" id="theme-toggle" title="Toggle theme"><i class="ri-sun-line" id="theme-icon"></i></div>
+    <div class="language-toggle" id="language-toggle" title="Switch language"><i class="ri-earth-line"></i></div>
 
-  <div class="progress-container">
-    <div class="logo"></div>
-    <div class="progress-title">Raising for AquaUSD Promo!</div>
-    <div class="progress-info" id="progress-info">Balance: - USD</div>
-    <div class="goal-text">Goal: Collect $200 for promotion</div>
-    <div class="progress-bar-background">
-      <div class="progress-bar" id="progress-bar">
-        <span id="progress-percent"></span>
+    <div class="logo" id="logo" alt="AquaUSD logo"></div>
+    <div class="info-title" id="token-name" title="AquaUSD - Over-collateralized stablecoin">AquaUSD</div>
+    <div class="description" id="token-description">Over-collateralized stablecoin.</div>
+
+    <div class="info-items">
+      <div class="info-item">
+        <div class="info-label" data-en="Supply" data-ru="Предложение">Supply</div>
+        <div class="info-value" id="total-supply">520712.63</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label" data-en="Holders" data-ru="Держатели">Holders</div>
+        <div class="info-value" id="holders">1180</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label" data-en="Price" data-ru="Цена">Price</div>
+        <div class="info-value" id="price">$1.00</div>
       </div>
     </div>
-    <a href="https://tonviewer.com/aquausd-fans.ton" target="_blank" class="wallet-link">Donate here: aquausd-fans.ton</a>
+
+    <div class="main-links">
+      <a href="#" target="_blank" class="main-link website" data-en="Website" data-ru="Вебсайт"><i class="ri-global-line"></i> Website</a>
+      <a href="https://app.aquaprotocol.xyz?refCode=179881722e6f9913fd9a06e590d969589d182356a4187866111391466916b2ff" target="_blank" class="main-link" id="mint-button" data-en="Mint AquaUSD" data-ru="Минт AquaUSD"><i class="ri-coins-line"></i> Mint AquaUSD</a>
+    </div>
+
+    <div class="icon-links">
+      <a href="https://docs.aquaprotocol.xyz" target="_blank" class="icon-link" data-tooltip="Documentation"><i class="ri-file-list-3-line"></i></a>
+      <a href="#" target="_blank" class="icon-link telegram-channel" data-tooltip="Telegram Channel"><i class="ri-telegram-fill"></i></a>
+      <a href="#" target="_blank" class="icon-link telegram-group" data-tooltip="Telegram Group"><i class="ri-group-line"></i></a>
+      <a href="https://twitter.com/aquaprotocolxyz" target="_blank" class="icon-link" data-tooltip="Follow on X"><i class="ri-twitter-x-fill"></i></a>
+      <a href="https://aquaprotocolxyz.medium.com/" target="_blank" class="icon-link" data-tooltip="Read on Medium"><i class="ri-medium-fill"></i></a>
+      <a href="https://www.linkedin.com/company/aqua-protocol-xyz/" target="_blank" class="icon-link" data-tooltip="LinkedIn"><i class="ri-linkedin-box-fill"></i></a>
+    </div>
+
+    <button class="share-button" id="share-button" data-en="Share" data-ru="Поделиться">Поделиться</button>
   </div>
 
+  <script src="https://telegram.org/js/telegram-web-app.js?v=1.1.0"></script>
+
   <script>
-    const maxUSD = 200; // Target amount in USD
-    const walletAddress = 'EQAXmIFyLm-ZE_2aBuWQ2WlYnRgjVqQYeGYRE5FGaRay_--L';
-    let initialFillDone = false;
-
-    async function updateProgressBar() {
-      try {
-        // Fetching jetton balances
-        const jettonsResponse = await fetch(`https://tonapi.io/v2/accounts/${walletAddress}/jettons`);
-        const jettonsData = await jettonsResponse.json();
-
-        // Fetching TON balance
-        const tonResponse = await fetch(`https://tonapi.io/v2/accounts/${walletAddress}`);
-        const tonData = await tonResponse.json();
-
-        // Fetching prices
-        const pricesResponse = await fetch("https://api.dedust.io/v2/prices");
-        const pricesData = await pricesResponse.json();
-
-        // Getting TON price
-        const tonPriceData = pricesData.find(price => price.symbol === "TON");
-        const tonPrice = tonPriceData ? tonPriceData.price : null;
-
-        if (!tonPrice) {
-          console.error("TON price not found");
-          return;
-        }
-
-        const tonBalance = tonData.balance / 1e9;
-        const tonValueUSD = tonBalance * tonPrice;
-
-        // Calculating jettons value in USD
-        let jettonsValueUSD = 0;
-
-        for (const jetton of jettonsData.balances) {
-          const balance = parseFloat(jetton.balance);
-          const decimals = jetton.jetton.decimals;
-          const symbol = jetton.jetton.symbol;
-
-          let valueUSD = 0;
-
-          if (symbol === "USD₮" || symbol === "AquaUSD") {
-            const amount = balance / Math.pow(10, decimals);
-            valueUSD = amount;
-          } else {
-            const tokenPriceData = pricesData.find(price => price.symbol === symbol);
-            if (tokenPriceData) {
-              const tokenPrice = tokenPriceData.price;
-              const amount = balance / Math.pow(10, decimals);
-              valueUSD = amount * tokenPrice;
-            }
-          }
-          jettonsValueUSD += valueUSD;
-        }
-
-        const totalValueUSD = tonValueUSD + jettonsValueUSD;
-        const percentage = (totalValueUSD / maxUSD) * 100;
-
-        const progressBar = document.getElementById("progress-bar");
-        const progressText = document.getElementById("progress-percent");
-        const currentTokens = document.getElementById("progress-info");
-
-        progressBar.style.width = Math.min(percentage, 100) + '%';
-
-        if (!initialFillDone) {
-          progressBar.style.transition = 'width 3s ease';
-          animateValue(progressText, 0, percentage, 3000);
-          initialFillDone = true;
-        } else {
-          progressBar.style.transition = 'width 0.5s ease';
-          animateValue(progressText, parseFloat(progressText.innerText), percentage, 500);
-        }
-
-        currentTokens.innerText = `Balance: ${totalValueUSD.toFixed(2)} USD`;
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    }
-
-    function animateValue(obj, start, end, duration) {
-      let startTimestamp = null;
-      const step = (timestamp) => {
-        if (!startTimestamp) startTimestamp = timestamp;
-        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        obj.innerText = (progress * (end - start) + start).toFixed(2) + '%';
-        if (progress < 1) {
-          window.requestAnimationFrame(step);
+    document.addEventListener('DOMContentLoaded', () => {
+      // Проверка, запущено ли приложение внутри Telegram
+      const links = {
+        'en': {
+          website: 'https://aquaprotocol.xyz/',
+          channel: 'https://t.me/aquaprotocolxyzchannelen',
+          group: 'https://t.me/aquaprotocolxyzen'
+        },
+        'ru': {
+          website: 'https://aquaprotocol.xyz/ru',
+          channel: 'https://t.me/aquaprotocolxyzchannel',
+          group: 'https://t.me/aquaprotocolxyz'
+        },
+        'default': {
+          website: 'https://aquaprotocol.xyz/',
+          channel: 'https://t.me/aquaprotocolxyzchannelen',
+          group: 'https://t.me/aquaprotocolxyzen'
         }
       };
-      window.requestAnimationFrame(step);
-    }
+      const isTelegram = typeof window.Telegram !== 'undefined' && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && Object.keys(window.Telegram.WebApp.initDataUnsafe).length > 0;
+      const themeToggle = document.getElementById('theme-toggle');
+      const themeIcon = document.getElementById('theme-icon');
+      const languageToggle = document.getElementById('language-toggle');
+      const elementsWithLang = document.querySelectorAll('[data-en]');
+      const shareButton = document.getElementById('share-button');
+      const mintButton = document.getElementById('mint-button');
+      const tg = window.Telegram.WebApp;
+      // set tgUserLang if ifTelegram is true, else set it to none 
+      const tgUserLang = isTelegram ? tg.initDataUnsafe.user.language_code : null;
+      let currentLang = localStorage.getItem('language') || tgUserLang || (navigator.language.startsWith('ru') ? 'ru' : 'en');
+      let currentTheme = localStorage.getItem('theme') || 'dark';
+      if (isTelegram) {
+        shareTitle = 'AquaUSD Info';
+        shareText = 'Check out AquaUSD - Over-collateralized stablecoin!';
+        shareUrl = 'https://t.me/AquaProtoBot/Info';
+      } else {
+        shareTitle = 'AquaUSD Info';
+        shareText = 'Check out AquaUSD - Over-collateralized stablecoin!';
+        shareUrl = 'https://tonwidgets.levk.in';
+      }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      updateProgressBar();
-      setInterval(updateProgressBar, 5000);
+      function checkWebAppState() {
+        if (isTelegram) {
+            console.log('WebApp State:');
+            console.log(`- Version: ${window.Telegram.WebApp.version}`);
+            console.log(`- Platform: ${window.Telegram.WebApp.platform}`);
+            console.log(`- Color Scheme: ${window.Telegram.WebApp.colorScheme}`);
+            console.log(`- Theme: ${window.Telegram.WebApp.themeParams}`);
+            console.log(`- Expanded: ${window.Telegram.WebApp.isExpanded}`);
+            console.log(`- FullScreen: ${window.Telegram.WebApp.isFullscreen}`);
+            console.log(`- Active: ${window.Telegram.WebApp.isActive}`);
+            console.log(`- Viewport Height: ${window.Telegram.WebApp.viewportHeight}`);
+            console.log(`- Stable Viewport Height: ${window.Telegram.WebApp.viewportStableHeight}`);
+            console.log(`- Safe Area Insets:`, window.Telegram.WebApp.safeAreaInset);
+            console.log(`- Content Safe Area Insets:`, window.Telegram.WebApp.contentSafeAreaInset);
+            console.log(`- Vertical Swipes Enabled: ${window.Telegram.WebApp.isVerticalSwipesEnabled}`);
+            // User Data:
+            console.log('User Data:');
+            console.log(`- User ID: ${window.Telegram.WebApp.initDataUnsafe.user.id}`);
+            console.log(`- User Name: ${window.Telegram.WebApp.initDataUnsafe.user.first_name}`);
+            console.log(`- User Last Name: ${window.Telegram.WebApp.initDataUnsafe.user.last_name}`);
+            console.log(`- User Username: ${window.Telegram.WebApp.initDataUnsafe.user.username}`);
+            console.log(`- User Photo: ${window.Telegram.WebApp.initDataUnsafe.user.photo_url}`);
+            console.log(`- User Language: ${window.Telegram.WebApp.initDataUnsafe.user.language_code}`);
+            console.log(`- Is Premium: ${window.Telegram.WebApp.initDataUnsafe.user.is_premium}`);
+            console.log(`- Added to Attachment Menu: ${window.Telegram.WebApp.initDataUnsafe.user.added_to_attachment_menu}`);
+            console.log(`- Allows Write to PM: ${window.Telegram.WebApp.initDataUnsafe.user.allows_write_to_pm}`);
+            console.log(`- Is Bot: ${window.Telegram.WebApp.initDataUnsafe.user.is_bot}`);
+        }
+      }
+
+      function updateLanguage(lang) {
+        elementsWithLang.forEach(el => el.innerText = el.getAttribute(`data-${lang}`));
+        localStorage.setItem('language', lang);
+        const selectedLinks = links[currentLang] || links['default'];
+        const websiteElement = document.querySelector('.website');
+        const channelElement = document.querySelector('.telegram-channel');
+        const groupElement = document.querySelector('.telegram-group');
+      
+        if (channelElement && groupElement) {
+          websiteElement.setAttribute('href', selectedLinks.website);
+          channelElement.setAttribute('href', selectedLinks.channel);
+          groupElement.setAttribute('href', selectedLinks.group);
+          console.log('Links updated:', selectedLinks);
+        } else {
+          console.error('Elements not found in DOM');
+        }
+      }
+
+      function updateTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        themeIcon.className = theme === 'dark' ? 'ri-sun-line' : 'ri-moon-line';
+        localStorage.setItem('theme', theme);
+        updateTelegramTheme(theme);
+      }
+
+      function updateTelegramTheme(theme) {
+        if (isTelegram) {
+          const tg = window.Telegram.WebApp;
+          const themeParams = theme === 'dark' ? {
+            header_bg_color: '#00778b',
+            bg_color: '#0d1b1e',
+            button_color: '#00b0b9',
+            text_color: '#1b2833',
+            hint_color: '#c2d5d6',
+            link_color: '#00b0b9'
+          } : {
+            header_bg_color: '#00778b',
+            bg_color: '#f0f8fa',
+            button_color: '#00778b',
+            text_color: '#ffffff',
+            hint_color: '#4a5b6b',
+            link_color: '#00778b'
+          };
+          tg.setBackgroundColor(themeParams.bg_color);
+          tg.setHeaderColor(themeParams.header_bg_color);
+          tg.setBottomBarColor(themeParams.bg_color);
+          tg.MainButton.color = themeParams.button_color;
+          tg.MainButton.textColor = themeParams.text_color;
+        }
+      }
+
+      checkWebAppState();
+      updateLanguage(currentLang);
+      updateTheme(currentTheme);
+
+      themeToggle.addEventListener('click', () => {
+        currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        updateTheme(currentTheme);
+      });
+
+      languageToggle.addEventListener('click', () => {
+        currentLang = currentLang === 'en' ? 'ru' : 'en';
+        updateLanguage(currentLang);
+      });
+
+      shareButton.addEventListener('click', () => {
+        if (navigator.share) {
+          navigator.share({
+            title: shareTitle,
+            text: shareText,
+            url: shareUrl
+          }).catch(console.error);
+        } else {
+          alert('Sharing not supported');
+        }
+      });
+
+      if (isTelegram) {
+        tg.expand();
+
+        if (tg.MainButton) {
+          tg.MainButton.setText("Mint AquaUSD");
+          tg.MainButton.show();
+
+          if (mintButton) {
+            mintButton.style.display = 'none';
+          }
+
+          tg.MainButton.onClick(() => {
+            window.location.href = "https://app.aquaprotocol.xyz?refCode=179881722e6f9913fd9a06e590d969589d182356a4187866111391466916b2ff";
+          });
+        }
+      } else {
+        // Убедитесь, что кнопка видна в не-Telegram окружении
+        if (mintButton) {
+          mintButton.style.display = 'flex';
+        }
+      }
     });
   </script>
 </body>
