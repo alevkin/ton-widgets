@@ -181,7 +181,7 @@
       justify-content: center;
     }
 
-    .main-link {
+    .main-link, .mint-link {
       flex: 1;
       padding: 10px;
       background-color: var(--button-bg-color);
@@ -198,7 +198,7 @@
       transition: transform 0.3s, box-shadow 0.3s;
     }
 
-    .main-link:hover {
+    .main-link:hover, .mint-link:hover {
       transform: translateY(-2px) scale(1.05);
       box-shadow: 0 5px 15px rgba(0, 119, 139, 0.4);
     }
@@ -277,7 +277,7 @@
 
     <div class="main-links">
       <a href="#" target="_blank" class="main-link website" data-en="Website" data-ru="Вебсайт"><i class="ri-global-line"></i> Website</a>
-      <a href="https://app.aquaprotocol.xyz?refCode=179881722e6f9913fd9a06e590d969589d182356a4187866111391466916b2ff" target="_blank" class="main-link" id="mint-button" data-en="Mint AquaUSD" data-ru="Минт AquaUSD"><i class="ri-coins-line"></i> Mint AquaUSD</a>
+      <a href="https://app.aquaprotocol.xyz?refCode=179881722e6f9913fd9a06e590d969589d182356a4187866111391466916b2ff" target="_blank" class="mint-link" id="mint-button" data-en="Mint AquaUSD" data-ru="Минт AquaUSD"><i class="ri-coins-line"></i> Mint AquaUSD</a>
     </div>
 
     <div class="icon-links">
@@ -426,6 +426,7 @@
           event_category: 'Link',
           event_label: 'Telegram Channel'
         });
+        console.log('Telegram Channel clicked and event tracked!');
       });
       
       document.querySelector('.telegram-group').addEventListener('click', () => {
@@ -433,6 +434,7 @@
           event_category: 'Link',
           event_label: 'Telegram Group'
         });
+        console.log('Telegram Group clicked and event tracked!');
       });
 
       document.querySelector('.website').addEventListener('click', () => {
@@ -440,6 +442,7 @@
           event_category: 'Link',
           event_label: 'Website'
         });
+        console.log('Website clicked and event tracked!');
       });
 
       document.querySelector('.share-button').addEventListener('click', () => {
@@ -447,6 +450,7 @@
           event_category: 'Button',
           event_label: 'Share'
         });
+        console.log('Share button clicked and event tracked!');
       });
 
       themeToggle.addEventListener('click', () => {
@@ -480,7 +484,7 @@
           tg.MainButton.onClick(() => {
             gtag('event', 'click', {
               event_category: 'MainButton',
-              event_label: 'MintAquaUSD'
+              event_label: 'Mint AquaUSD'
             });
             console.log('MainButton clicked and event tracked!');
           });
@@ -498,11 +502,12 @@
         if (mintButton) {
           mintButton.style.display = 'flex';
         }
-        document.querySelector('.main-link').addEventListener('click', () => {
+        document.querySelector('.mint-link').addEventListener('click', () => {
           gtag('event', 'click', {
-            event_category: 'Button',
+            event_category: 'MainButton',
             event_label: 'Mint AquaUSD'
           });
+          console.log('MainButton clicked and event tracked!');
         });
       }
     });
