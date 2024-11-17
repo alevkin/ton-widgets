@@ -421,6 +421,34 @@
       updateLanguage(currentLang);
       updateTheme(currentTheme);
 
+      document.querySelector('.telegram-channel').addEventListener('click', () => {
+        gtag('event', 'click', {
+          event_category: 'Link',
+          event_label: 'Telegram Channel'
+        });
+      });
+      
+      document.querySelector('.telegram-group').addEventListener('click', () => {
+        gtag('event', 'click', {
+          event_category: 'Link',
+          event_label: 'Telegram Group'
+        });
+      });
+
+      document.querySelector('.website').addEventListener('click', () => {
+        gtag('event', 'click', {
+          event_category: 'Link',
+          event_label: 'Website'
+        });
+      });
+
+      document.querySelector('.share-button').addEventListener('click', () => {
+        gtag('event', 'click', {
+          event_category: 'Button',
+          event_label: 'Share'
+        });
+      });
+
       themeToggle.addEventListener('click', () => {
         currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
         updateTheme(currentTheme);
@@ -449,6 +477,13 @@
         if (tg.MainButton) {
           tg.MainButton.setText("Mint AquaUSD");
           tg.MainButton.show();
+          tg.MainButton.onClick(() => {
+            gtag('event', 'click', {
+              event_category: 'MainButton',
+              event_label: 'MintAquaUSD'
+            });
+            console.log('MainButton clicked and event tracked!');
+          });
 
           if (mintButton) {
             mintButton.style.display = 'none';
@@ -463,6 +498,12 @@
         if (mintButton) {
           mintButton.style.display = 'flex';
         }
+        document.querySelector('.main-link').addEventListener('click', () => {
+          gtag('event', 'click', {
+            event_category: 'Button',
+            event_label: 'Mint AquaUSD'
+          });
+        });
       }
     });
   </script>
